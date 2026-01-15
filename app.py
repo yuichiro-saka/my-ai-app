@@ -12,13 +12,13 @@ import torch
 # ページ設定
 st.set_page_config(page_title="製薬シンポ・AI要約ツール", page_icon="💊")
 
+# app.py の load_summary_model 部分を以下に書き換え
 @st.cache_resource
 def load_summary_model():
-    # model_kwargs でセキュリティチェックをバイパスする設定を直接渡します
     return pipeline(
         "summarization", 
         model="google/mt5-small",
-        model_kwargs={"weights_only": False} # これが重要です！
+        model_kwargs={"weights_only": False, "low_cpu_mem_usage": True} # low_cpu_mem_usage を追加
     )
 
 st.title("💊 製薬シンポジウムAI要約ツール")
@@ -38,7 +38,7 @@ if st.button("AI要約を実行"):
         cleaned_text = soup.get_text(separator="\n", strip=True)
         
         # 2. テキストが長すぎる場合の処理（AIが処理できる長さに制限）
-        input_text = cleaned_text[:1000]
+        input_text = cleaned_text[:800]
         
         st.subheader("📝 AI要約結果")
         with st.spinner("要約を生成中..."):
