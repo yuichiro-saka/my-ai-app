@@ -1,0 +1,7 @@
+venv/
+venv_new/
+__pycache__/
+.DS_Store
+*.bin
+*.pt
+*.safetensors
