@@ -1,6 +1,7 @@
 streamlit
 beautifulsoup4
-transformers[sentencepiece]
+transformers
+sentencepiece
 torch
 tiktoken
 pyyaml
