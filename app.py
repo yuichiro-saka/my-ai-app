@@ -15,10 +15,22 @@ st.set_page_config(page_title="製薬シンポ・AI要約ツール", page_icon="
 # app.py の load_summary_model 部分を以下に書き換え
 @st.cache_resource
 def load_summary_model():
+    # 1. 辞書（Tokenizer）を明示的に読み込む
+    from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+    model_name = "google/mt5-small"
+    
+    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+    model = AutoModelForSeq2SeqLM.from_pretrained(
+        model_name, 
+        low_cpu_mem_usage=True, 
+        torch_dtype=torch.float32
+    )
+
+    # 2. 明示的に組み立てた部品を pipeline に渡す
     return pipeline(
         "summarization", 
-        model="google/mt5-small",
-        model_kwargs={"weights_only": False, "low_cpu_mem_usage": True} # low_cpu_mem_usage を追加
+        model=model,
+        tokenizer=tokenizer
     )
 
 st.title("💊 製薬シンポジウムAI要約ツール")
